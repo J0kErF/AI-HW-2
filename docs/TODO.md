@@ -18,10 +18,12 @@ Work order is mandated by Guide §2.5: **docs approved before any code.**
 - [ ] **Gate:** team approves all docs · DoD: sign-off recorded in PROMPTS.md
 
 ## Phase 1 — Core engineering (OOP utilities, TDD)
-- [ ] `shared/version.py` (=1.00) + startup config-version validation · DoD: test asserts mismatch raises
-- [ ] `shared/config.py` ConfigManager (loads `config/*.json` + `.env`, no hardcoding) · DoD: edge tests (missing key, bad version)
+- [x] `shared/version.py` (=1.00) + startup config-version validation · DoD: test asserts mismatch raises
+- [x] `shared/config.py` ConfigManager (loads `config/*.json` + `.env`, no hardcoding) · DoD: edge tests (missing key, bad version)
+- [x] `shared/rate_limiter.py` SlidingWindowLimiter · DoD: minute/hour limits + window-free tested (96%)
+- [x] `shared/budget.py` BudgetTracker (cost-per-million, totals, would_exceed) · DoD: 100% covered
+- [x] `shared/gatekeeper.py` ApiGatekeeper (rate limit, FIFO queue, backpressure, retry, budget cap, log) · DoD: limit-hit→queue, queue-full→backpressure, budget→block, retry tested (99%)
 - [ ] `shared/logging_setup.py` FIFO rotating logs from `logging_config.json` · DoD: rotates at N files × 500 lines
-- [ ] `shared/gatekeeper.py` ApiGatekeeper (rate limit, FIFO queue, backpressure, retry, budget cap, log) · DoD: tests for limit-hit→queue, budget-exceeded→block
 - [ ] `services/watchdog.py` Watchdog (keep-alive heartbeat, timeout, kill & restart) · DoD: test simulates hang→restart and dead→restart
 - [ ] mixins: `JsonContractMixin`, `TokenAccountingMixin` · DoD: each tested in isolation
 
