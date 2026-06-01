@@ -9,6 +9,11 @@ def test_parse_json_valid_object() -> None:
     assert JsonContractMixin.parse_json('{"a": 1}') == {"a": 1}
 
 
+def test_parse_json_strips_markdown_fences() -> None:
+    assert JsonContractMixin.parse_json('```json\n{"a": 1}\n```') == {"a": 1}
+    assert JsonContractMixin.parse_json('```\n{"b": 2}\n```') == {"b": 2}
+
+
 def test_parse_json_malformed_raises() -> None:
     with pytest.raises(ValueError):
         JsonContractMixin.parse_json("{not json}")

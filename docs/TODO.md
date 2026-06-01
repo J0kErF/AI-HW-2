@@ -41,9 +41,20 @@ Work order is mandated by Guide §2.5: **docs approved before any code.**
 > **Phase 2 core complete.** Global coverage **86.9%** ≥ 85% gate. 62 tests pass.
 
 ## Phase 3 — Orchestration & SDK
-- [ ] `services/orchestrator.py` multiprocessing + Queue IPC, ≥10 pings/side · DoD: full mocked debate end-to-end
-- [ ] `sdk/sdk.py` DebateSDK facade (run_debate, get_transcript, get_cost_report) · DoD: integration test drives debate via SDK only
-- [ ] `main.py` thin entry → SDK · DoD: no logic in main beyond wiring
+- [x] `services/orchestrator.py` — drives ≥10 pings/side over a DebaterHandle transport; watchdog restart on timeout; graceful conclusion (97%)
+- [x] `services/process_handle.py` — real multiprocessing + Queue IPC (one process per debater); integration glue
+- [x] `services/search_providers.py` — Tavily + DuckDuckGo (`ddgs`) providers, config-selected
+- [x] `sdk/sdk.py` DebateSDK facade (run_debate, get_transcript, get_cost_report) with offline injection points (100%)
+- [x] `main.py` thin entry → SDK
+- [x] **LIVE e2e verified**: real spawned processes + web search + Gemini → Pro argued w/ 3 sources, Con hit 503 → watchdog restarted it → Father judged, no tie, no crash.
+
+> **Phase 3 complete.** 72 tests, 94.97% coverage, ruff clean.
+> Resilience fix: Father LLM calls degrade gracefully (`_safe_respond`); transient
+> 429/5xx mapped to gatekeeper retry; JSON fence-stripping for model replies.
+
+### Phase 3 follow-ups (carry into Phase 5)
+- [ ] Aggregate cost across worker processes from each turn's `tokens` field (per-process gatekeepers don't share state) → real cost table.
+- [ ] Free-tier note: `gemini-2.5-pro` has 0 free quota; using `gemini-2.5-flash`. 503s are intermittent on free tier — paid tier or pings=5 for a clean full run.
 
 ## Phase 4 — UX
 - [ ] `cli/menu.py` keyboard terminal menu (Run debate / Replay / Show cost / Config / Quit) · DoD: every feature reachable from menu

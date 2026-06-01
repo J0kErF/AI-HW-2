@@ -43,6 +43,13 @@ class BaseAgent(TokenAccountingMixin, JsonContractMixin, ABC):
         self.record_tokens(in_tokens, out_tokens)
         return text
 
+    def _safe_respond(self, prompt: str, system: str | None = None) -> str:
+        """Like _respond, but returns "" on any provider failure (degrade, don't crash)."""
+        try:
+            return self._respond(prompt, system)
+        except Exception:  # a transient provider error must not abort the debate
+            return ""
+
     def _safe_parse(self, raw: str) -> dict[str, Any]:
         """Parse JSON, returning {} on malformed input (graceful degradation)."""
         try:

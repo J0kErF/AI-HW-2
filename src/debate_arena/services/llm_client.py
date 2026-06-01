@@ -8,7 +8,10 @@ usage is reported back to the gatekeeper for cost accounting.
 from typing import Any
 
 from google import genai
-from google.genai import types
+from google.genai import errors, types
+
+# Provider error codes worth retrying (rate limit / transient server issues).
+_RETRYABLE_CODES = {429, 500, 502, 503, 504}
 
 
 def _usage(resp: Any) -> tuple[int, int]:
@@ -36,9 +39,16 @@ class GeminiClient:
         config = types.GenerateContentConfig(system_instruction=system) if system else None
 
         def _call() -> Any:
-            return self._client.models.generate_content(
-                model=model, contents=prompt, config=config
-            )
+            try:
+                return self._client.models.generate_content(
+                    model=model, contents=prompt, config=config
+                )
+            except errors.APIError as exc:
+                # Map retryable provider errors to ConnectionError so the
+                # gatekeeper retries with backoff; re-raise the rest as-is.
+                if getattr(exc, "code", None) in _RETRYABLE_CODES:
+                    raise ConnectionError(str(exc)) from exc
+                raise
 
         resp = self._gk.execute(_call, service="llm", model=model, usage_extractor=_usage)
         return (resp.text or ""), _usage(resp)

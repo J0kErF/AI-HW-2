@@ -9,7 +9,7 @@ authors = [{ name = "TODO: Name", email = "mohammad@mryosef.com" }]
 dependencies = [
     "google-genai>=0.3.0",
     "tavily-python>=0.5.0",
-    "duckduckgo-search>=6.0.0",
+    "ddgs>=9.0.0",
     "rich>=13.7.0",
     "pydantic>=2.6.0",
     "python-dotenv>=1.0.0",
@@ -42,7 +42,15 @@ ignore = ["E501"]
 
 [tool.coverage.run]
 source = ["src"]
-omit = ["src/main.py", "*/tests/*", "src/**/cli/*"]
+# Omit integration-only glue exercised by the live run / smoke test, not unit tests:
+# the CLI, the process transport, and the network search providers.
+omit = [
+    "src/main.py",
+    "*/tests/*",
+    "src/**/cli/*",
+    "*/process_handle.py",
+    "*/search_providers.py",
+]
 
 [tool.coverage.report]
 fail_under = 85

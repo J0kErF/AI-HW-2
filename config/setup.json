@@ -12,7 +12,7 @@
   "provider": "gemini",
   "models": {
     "debater": "gemini-2.5-flash",
-    "moderator": "gemini-2.5-pro"
+    "moderator": "gemini-2.5-flash"
   },
   "search": {
     "provider": "tavily",

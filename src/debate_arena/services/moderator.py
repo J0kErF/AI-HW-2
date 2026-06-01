@@ -63,7 +63,7 @@ class ModeratorAgent(BaseAgent):
             f"Does this {stance.value} turn concede the opponent's position? "
             f'Reply strict JSON {{"capitulated": true|false}}.\nTurn: {turn.get("claim", "")}'
         )
-        return bool(self._safe_parse(self._respond(prompt)).get("capitulated", False))
+        return bool(self._safe_parse(self._safe_respond(prompt)).get("capitulated", False))
 
     def _build_prompt(self, message: dict[str, Any]) -> str:
         lines = [f"{m['stance']} ({m['turn_id']}): {m['claim']}" for m in message["transcript"]]
@@ -76,8 +76,8 @@ class ModeratorAgent(BaseAgent):
 
     def judge(self, transcript: list[dict[str, Any]]) -> Verdict:
         """Score persuasion only and return a single winner (never a tie)."""
-        data = self._safe_parse(self._respond(self._build_prompt({"transcript": transcript}),
-                                              self._judge_system()))
+        data = self._safe_parse(self._safe_respond(self._build_prompt({"transcript": transcript}),
+                                                   self._judge_system()))
         scores = data.get("scores", {})
         pro, con = self._break_tie(int(scores.get("pro", 0)), int(scores.get("con", 0)), transcript)
         winner = Stance.PRO if pro > con else Stance.CON

@@ -12,10 +12,22 @@ class JsonContractMixin:
     """Parse and validate strict-JSON agent messages."""
 
     @staticmethod
+    def _strip_fences(raw: str) -> str:
+        """Strip a leading ```json / ``` fence and trailing ``` if present."""
+        text = raw.strip()
+        if text.startswith("```"):
+            text = text[3:]
+            if text[:4].lower() == "json":
+                text = text[4:]
+            if text.endswith("```"):
+                text = text[:-3]
+        return text.strip()
+
+    @staticmethod
     def parse_json(raw: str) -> dict[str, Any]:
-        """Parse a JSON string, raising ValueError on malformed input."""
+        """Parse a JSON string (tolerating markdown fences), raising on malformed input."""
         try:
-            data = json.loads(raw)
+            data = json.loads(JsonContractMixin._strip_fences(raw))
         except json.JSONDecodeError as exc:
             raise ValueError(f"Malformed JSON message: {exc}") from exc
         if not isinstance(data, dict):

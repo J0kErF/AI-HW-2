@@ -12,8 +12,17 @@ class _FakeLLM:
         return self.text, (2, 2)
 
 
+class _RaisingLLM:
+    def complete(self, model, prompt, system=None) -> tuple:
+        raise ConnectionError("provider down")
+
+
 def _moderator(text: str) -> ModeratorAgent:
-    return ModeratorAgent("father", "gemini-2.5-pro", _FakeLLM(text), rounds=10, rubric={})
+    return ModeratorAgent("father", "gemini-2.5-flash", _FakeLLM(text), rounds=10, rubric={})
+
+
+def _resilient_moderator() -> ModeratorAgent:
+    return ModeratorAgent("father", "gemini-2.5-flash", _RaisingLLM(), rounds=10, rubric={})
 
 
 def _arg(stance: str, turn_id: str, n_sources: int = 1, claim: str = "c", **extra) -> dict:
@@ -61,6 +70,19 @@ def test_judge_breaks_tie_using_citation_count() -> None:
 def test_detect_capitulation_parses_boolean() -> None:
     mod = _moderator('{"capitulated": true}')
     assert mod.detect_capitulation({"claim": "You are right"}, Stance.PRO) is True
+
+
+def test_judge_degrades_gracefully_on_provider_failure() -> None:
+    mod = _resilient_moderator()
+    transcript = [_arg("pro", "pro-1", n_sources=2), _arg("con", "con-1", n_sources=1)]
+    verdict = mod.judge(transcript)  # LLM raises -> citation-based fallback, no crash
+    assert verdict.scores["pro"] != verdict.scores["con"]
+    assert verdict.winner is Stance.PRO
+
+
+def test_detect_capitulation_false_on_provider_failure() -> None:
+    mod = _resilient_moderator()
+    assert mod.detect_capitulation({"claim": "anything"}, Stance.PRO) is False
 
 
 def test_intervene_returns_intervention_message() -> None:

@@ -19,6 +19,7 @@ htmlcov/
 
 # Runtime output
 logs/
+*.log
 results/*.json
 results/*.txt
 
