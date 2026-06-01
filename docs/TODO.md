@@ -32,10 +32,13 @@ Work order is mandated by Guide §2.5: **docs approved before any code.**
 > Global coverage reaches ≥85% once Phase 2/3 fill the agent/orchestrator stubs.
 
 ## Phase 2 — Tool & agents (mocked LLM/search in tests)
-- [ ] `services/web_search.py` WebSearchTool (real provider + error boundary) · DoD: returns real sources; failure → graceful empty + flag
-- [ ] `services/base_agent.py` BaseAgent (act/parse_json/handle_error) · DoD: malformed-JSON test
-- [ ] `services/debater.py` DebaterAgent (stance, persona, anti-capitulation, cites sources, `responding_to`) · DoD: rebuttal references prior turn
-- [ ] `services/moderator.py` ModeratorAgent/Father (route, intervene, judge — blind, no tie) · DoD: tie never returned; intervention on capitulation
+- [x] `services/web_search.py` WebSearchTool (provider-agnostic + gatekept + error boundary) · DoD: degrade-on-failure + cap tested (100%)
+- [x] `services/base_agent.py` BaseAgent (act/parse_json/handle_error/_respond/_safe_parse) · DoD: malformed-JSON + token accounting tested (92%)
+- [x] `services/debater.py` DebaterAgent (stance, persona, anti-capitulation, cites sources, `responding_to`) · DoD: rebuttal references prior turn (100%)
+- [x] `services/moderator.py` ModeratorAgent/Father (validate, intervene, capitulation, judge — blind, no tie + tie-break) · DoD: tie never returned (93%)
+- [ ] real search providers (Tavily/DuckDuckGo) behind the injected `provider` callable — wire in Phase 3 with the SDK
+
+> **Phase 2 core complete.** Global coverage **86.9%** ≥ 85% gate. 62 tests pass.
 
 ## Phase 3 — Orchestration & SDK
 - [ ] `services/orchestrator.py` multiprocessing + Queue IPC, ≥10 pings/side · DoD: full mocked debate end-to-end
