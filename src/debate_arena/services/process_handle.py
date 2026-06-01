@@ -12,11 +12,11 @@ from typing import Any
 
 from debate_arena.constants import Stance
 from debate_arena.services.debater import DebaterAgent
-from debate_arena.services.llm_client import GeminiClient
+from debate_arena.services.llm_client import build_llm_client
 from debate_arena.services.search_providers import build_provider
 from debate_arena.services.web_search import WebSearchTool
 from debate_arena.shared.config import ConfigManager
-from debate_arena.shared.env import gemini_api_key, load_env
+from debate_arena.shared.env import load_env
 from debate_arena.shared.gatekeeper import ApiGatekeeper
 
 
@@ -26,7 +26,7 @@ def build_debater(stance: str, config_dir: str) -> DebaterAgent:  # pragma: no c
     cfg = ConfigManager(config_dir)
     rate = cfg.load("rate_limits")
     gatekeeper = ApiGatekeeper(rate, rate["budget"])
-    llm = GeminiClient(gatekeeper, gemini_api_key())
+    llm = build_llm_client(gatekeeper, cfg)
     search = WebSearchTool(gatekeeper, build_provider(cfg),
                            cfg.get("setup", "search", "results_per_query"))
     model = cfg.get("setup", "models", "debater")

@@ -52,3 +52,20 @@ class GeminiClient:
 
         resp = self._gk.execute(_call, service="llm", model=model, usage_extractor=_usage)
         return (resp.text or ""), _usage(resp)
+
+
+def build_llm_client(gatekeeper: Any, config: Any) -> Any:  # pragma: no cover (live wiring)
+    """Construct the configured LLM client (NVIDIA/OpenAI-compatible or Gemini)."""
+    import os
+
+    provider = config.get("setup", "provider")
+    if provider == "nvidia":
+        from debate_arena.services.openai_client import OpenAICompatClient
+
+        key = os.environ.get("NVIDIA_API_KEY")
+        if not key:
+            raise RuntimeError("NVIDIA_API_KEY is not set in .env")
+        return OpenAICompatClient(gatekeeper, key, config.get("setup", "nvidia_base_url"))
+    from debate_arena.shared.env import gemini_api_key
+
+    return GeminiClient(gatekeeper, gemini_api_key())

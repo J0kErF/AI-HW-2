@@ -52,10 +52,9 @@ class DebateSDK:
                         wd["max_restarts"])
 
     def _build_father(self, rounds: int) -> ModeratorAgent:  # pragma: no cover (live LLM)
-        from debate_arena.services.llm_client import GeminiClient
-        from debate_arena.shared.env import gemini_api_key
+        from debate_arena.services.llm_client import build_llm_client
 
-        llm = GeminiClient(self._gatekeeper, gemini_api_key())
+        llm = build_llm_client(self._gatekeeper, self._config)
         model = self._config.get("setup", "models", "moderator")
         return ModeratorAgent("father", model, llm, rounds, {})
 
