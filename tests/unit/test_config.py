@@ -13,7 +13,7 @@ def test_load_real_setup(config: ConfigManager) -> None:
 
 
 def test_nested_get(config: ConfigManager) -> None:
-    assert config.get("setup", "debate", "pings_per_side") == 10
+    assert config.get("setup", "debate", "pings_per_side") == 5
 
 
 def test_get_missing_key_returns_default(config: ConfigManager) -> None:

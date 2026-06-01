@@ -37,5 +37,5 @@ def test_defaults_pulled_from_config() -> None:
     sdk = DebateSDK("config")
     handles = {"pro": FakeHandle("pro"), "con": FakeHandle("con")}
     result = sdk.run_debate(make_handle=lambda s: handles[s], father=FakeFather())
-    # default pings_per_side is 10 -> 20 turns
-    assert len(result.transcript) == 20
+    # default pings_per_side is 5 -> 10 turns
+    assert len(result.transcript) == 10

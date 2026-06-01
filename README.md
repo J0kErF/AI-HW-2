@@ -63,19 +63,25 @@ Grader ── menu / SDK ──> DebateSDK ──> Orchestrator ──> Father(M
 ## 5. Configuration guide
 | File | Controls |
 |------|----------|
-| `config/setup.json` | topic, pings/side, personas, models, timeouts, watchdog |
+| `config/setup.json` | topic, pings/side (**5**), personas, models (free-tier `gemini-2.5-flash`), search provider (**duckduckgo**, keyless), timeouts, watchdog |
 | `config/rate_limits.json` | per-service rate limits + budget cap + pricing |
 | `config/logging_config.json` | FIFO log rotation (max files × max lines) |
 
+> Search defaults to **keyless DuckDuckGo** (`ddgs`) — no Tavily key needed. To use
+> Tavily instead, set `search.provider` to `tavily` and add `TAVILY_API_KEY` to `.env`.
+
 ## 6. Cost analysis
-_To be filled after the first full run (Phase 5)._
+Runs on the **free Google AI (Gemini) tier** with `gemini-2.5-flash` for both
+debaters and the moderator (the free tier grants **0 quota for `gemini-2.5-pro`**).
+Web search uses **keyless DuckDuckGo** (`ddgs`), so **no Tavily key is required**.
+
+> **Budget note (required by Ex §8.7):** pings are set to **5 per side** (reduced
+> from 10) to fit the free tier. This is explicitly permitted and not penalized.
+> Cost is aggregated from each turn's token usage (see `get_cost_report`).
 
 | Model | Input tokens | Output tokens | Total cost |
 |-------|-------------:|--------------:|-----------:|
-| _tbd_ | _tbd_ | _tbd_ | _tbd_ |
-
-> Budget note: pings may be reduced from 10 → 5 per side if API budget is
-> constrained (Ex §8.7); this will be stated here if used.
+| _filled after the captured full run_ | _tbd_ | _tbd_ | _tbd_ |
 
 ## 7. Session transcripts & screenshots
 _Embedded after the first full run (Phase 4/5): full debate transcript +
@@ -95,4 +101,5 @@ TDD (red→green→refactor), `uv` only. See `pyproject.toml`.
 
 ## 11. License & credits
 MIT. Authors: **TODO (name + ID)**, partner **TODO (name + ID)**.
-Group code: **TODO (confirm: `moamteam` vs `uoh-rl07`)**.
+Group code: **moamteam**. Submission PDF: `moamteam-ex02.pdf` (official template).
+Repo shared with the lecturer (rmisegal@gmail.com); each partner submits on Moodle.

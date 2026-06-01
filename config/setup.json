@@ -2,7 +2,7 @@
   "version": "1.00",
   "debate": {
     "default_topic": "Nuclear energy should be a core part of the climate solution",
-    "pings_per_side": 10,
+    "pings_per_side": 5,
     "min_sources_per_argument": 1,
     "personas": {
       "pro": "A relentless advocate who concedes nothing and reframes every objection.",
@@ -15,7 +15,7 @@
     "moderator": "gemini-2.5-flash"
   },
   "search": {
-    "provider": "tavily",
+    "provider": "duckduckgo",
     "fallback_provider": "duckduckgo",
     "results_per_query": 3
   },

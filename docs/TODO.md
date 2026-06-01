@@ -73,12 +73,13 @@ Work order is mandated by Guide §2.5: **docs approved before any code.**
 - [ ] Architecture diagrams + screenshots embedded in README
 - [ ] Full session transcript + Prompt Book finalized
 - [ ] **Honest self-grade ~88–90** + "Known Limitations" section (HW1 lesson — do NOT inflate)
-- [ ] Fill official Word template → `uoh-rl07-ex02.pdf`; share repo with rmisegal@gmail.com; both partners submit on Moodle
+- [ ] Fill official Word template → `moamteam-ex02.pdf`; share repo with rmisegal@gmail.com; both partners submit on Moodle
 
 ---
 
-## Open questions (resolve before/early in Phase 1)
-- [ ] **Group code**: HW1 feedback shows `moamteam`; template file is `uoh-rl07`. Confirm the registered 8-char code.
-- [ ] **LLM provider + web-search provider** to standardize on (Anthropic + Tavily assumed).
-- [ ] **Pings**: keep 10/side, or reduce to 5/side for budget (must note in README).
-- [ ] **Default topic** for the canned demo run.
+## Resolved decisions
+- [x] **Group code**: **`moamteam`** (confirmed). Submission PDF: `moamteam-ex02.pdf`.
+- [x] **LLM provider**: **Google Gemini, free tier**, `gemini-2.5-flash` for debaters AND moderator (`gemini-2.5-pro` has 0 free quota).
+- [x] **Web search**: **DuckDuckGo (`ddgs`), keyless / free** — no Tavily key required (Tavily kept optional via config).
+- [x] **Pings**: **5 per side** (reduced from 10 for the free tier; permitted by Ex §8.7, noted in README).
+- [x] **Default topic**: "Nuclear energy should be a core part of the climate solution" (configurable).
