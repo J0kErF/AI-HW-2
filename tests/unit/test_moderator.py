@@ -67,6 +67,13 @@ def test_judge_breaks_tie_using_citation_count() -> None:
     assert verdict.winner is Stance.PRO  # con had fewer citations -> loses the point
 
 
+def test_judge_tolerates_degraded_system_turns() -> None:
+    mod = _moderator('{"scores": {"pro": 60, "con": 55}, "justification": "ok"}')
+    transcript = [_arg("pro", "pro-1"), {"type": "system", "stance": "con"}]  # no turn_id/claim
+    verdict = mod.judge(transcript)  # must not KeyError
+    assert verdict.winner is Stance.PRO
+
+
 def test_detect_capitulation_parses_boolean() -> None:
     mod = _moderator('{"capitulated": true}')
     assert mod.detect_capitulation({"claim": "You are right"}, Stance.PRO) is True

@@ -44,8 +44,9 @@ def debater_worker(stance: str, config_dir: str, req: Any, resp: Any) -> None:  
         try:
             resp.put(agent.act(message))
         except Exception as exc:  # any failure becomes a system turn, never a hang
-            resp.put({"type": "system", "stance": stance, "error": str(exc),
-                      "claim": "", "sources": [], "responding_to": message.get("turn_id")})
+            resp.put({"type": "system", "stance": stance, "turn_id": f"{stance}-error",
+                      "error": str(exc), "claim": "", "sources": [],
+                      "responding_to": message.get("turn_id")})
 
 
 class ProcessDebaterHandle:  # pragma: no cover

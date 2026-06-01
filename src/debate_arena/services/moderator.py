@@ -66,7 +66,10 @@ class ModeratorAgent(BaseAgent):
         return bool(self._safe_parse(self._safe_respond(prompt)).get("capitulated", False))
 
     def _build_prompt(self, message: dict[str, Any]) -> str:
-        lines = [f"{m['stance']} ({m['turn_id']}): {m['claim']}" for m in message["transcript"]]
+        lines = [
+            f"{m.get('stance', '?')} ({m.get('turn_id', '?')}): {m.get('claim', '')}"
+            for m in message["transcript"]
+        ]
         return (
             "Judge the debate below on PERSUASION ABILITY ONLY. You are NOT told which "
             "side is correct and must not assume one. Score each side 0-100; scores must "
