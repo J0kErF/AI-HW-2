@@ -36,6 +36,7 @@ class FakeHandle:
             "turn_id": f"{self.stance}-{self._n}", "stance": self.stance,
             "type": "argument", "claim": "c", "sources": [{"url": "u"}],
             "responding_to": message.get("turn_id"),
+            "tokens": {"prompt": 5, "completion": 7},
         }
 
 

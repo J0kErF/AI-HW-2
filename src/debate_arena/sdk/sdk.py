@@ -11,6 +11,7 @@ from typing import Any
 
 from debate_arena.services.moderator import ModeratorAgent
 from debate_arena.services.orchestrator import DebateOrchestrator, DebateResult
+from debate_arena.services.reporting import CostEstimate, aggregate_tokens
 from debate_arena.services.watchdog import Watchdog
 from debate_arena.shared.config import ConfigManager
 from debate_arena.shared.env import load_env
@@ -31,13 +32,16 @@ class DebateSDK:
         self._last_result: DebateResult | None = None
 
     def run_debate(self, topic: str | None = None, rounds: int | None = None,
-                   make_handle: Any = None, father: Any = None) -> DebateResult:
+                   make_handle: Any = None, father: Any = None,
+                   on_event: Any = None) -> DebateResult:
         """Run a full debate; topic/rounds default to config values."""
         topic = topic or self._config.get("setup", "debate", "default_topic")
         rounds = rounds or self._config.get("setup", "debate", "pings_per_side")
         father = father or self._build_father(rounds)
         make_handle = make_handle or self._default_make_handle()
-        orchestrator = DebateOrchestrator(father, self._build_watchdog(), rounds, make_handle)
+        orchestrator = DebateOrchestrator(
+            father, self._build_watchdog(), rounds, make_handle, on_event
+        )
         self._last_result = orchestrator.run(topic)
         self._logger.info("debate complete: winner=%s", self._last_result.verdict.winner.value)
         return self._last_result
@@ -65,6 +69,18 @@ class DebateSDK:
         """Return the transcript of the most recent debate."""
         return self._last_result.transcript if self._last_result else []
 
-    def get_cost_report(self) -> Any:
-        """Return token/cost accounting for the gatekeeper."""
-        return self._gatekeeper.get_cost_report()
+    def get_cost_report(self) -> CostEstimate:
+        """Aggregate cost: debater tokens (from the transcript, across processes) plus
+        the Father's own gatekeeper usage in the main process."""
+        gk = self._gatekeeper.get_cost_report()
+        transcript = self._last_result.transcript if self._last_result else []
+        deb_in, deb_out = aggregate_tokens(transcript)
+        pin, pout = self._debater_price()
+        deb_cost = deb_in / 1_000_000 * pin + deb_out / 1_000_000 * pout
+        return CostEstimate(gk.input_tokens + deb_in, gk.output_tokens + deb_out,
+                            round(gk.cost_usd + deb_cost, 6))
+
+    def _debater_price(self) -> tuple[float, float]:
+        model = self._config.get("setup", "models", "debater")
+        price = self._config.get("rate_limits", "budget", "price_per_million", model) or {}
+        return price.get("input", 0.0), price.get("output", 0.0)

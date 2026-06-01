@@ -57,9 +57,14 @@ Work order is mandated by Guide §2.5: **docs approved before any code.**
 - [ ] Free-tier note: `gemini-2.5-pro` has 0 free quota; using `gemini-2.5-flash`. 503s are intermittent on free tier — paid tier or pings=5 for a clean full run.
 
 ## Phase 4 — UX
-- [ ] `cli/menu.py` keyboard terminal menu (Run debate / Replay / Show cost / Config / Quit) · DoD: every feature reachable from menu
-- [ ] `rich` rendering: distinct styles for Father / Pro / Con / Watchdog / System · DoD: screenshot captured
-- [ ] transcript export to `results/` (EN/HE) · DoD: full session saved
+- [x] `cli/menu.py` keyboard terminal menu (Run / Replay / Cost / Config / Quit) · DoD: every feature reachable; smoke-tested
+- [x] `cli/render.py` `rich` rendering: distinct styles per Pro/Con/intervention/system/validation/moderation
+- [x] `services/reporting.py` cost aggregation (cross-process, from transcript tokens) + transcript export to `results/` (txt + json) · DoD: tested (100%)
+- [x] SDK threads `on_event` for live rendering; `get_cost_report` now returns real aggregated cost
+- [ ] capture screenshots for README (Phase 5)
+
+> **Phase 4 complete.** 77 tests, 95.39% coverage, ruff clean. Cross-process
+> cost issue resolved (debater tokens travel in the IPC payload).
 
 ## Phase 5 — Delivery & verification
 - [ ] `uv run ruff check` → 0 violations

@@ -23,6 +23,16 @@ def test_cost_report_available() -> None:
     assert report.cost_usd == 0.0  # no calls made yet
 
 
+def test_cost_aggregated_from_transcript_tokens() -> None:
+    sdk = DebateSDK("config")
+    handles = {"pro": FakeHandle("pro"), "con": FakeHandle("con")}
+    sdk.run_debate(rounds=2, make_handle=lambda s: handles[s], father=FakeFather())
+    report = sdk.get_cost_report()
+    assert report.input_tokens == 4 * 5  # 4 turns x 5 prompt tokens
+    assert report.output_tokens == 4 * 7
+    assert report.cost_usd > 0  # priced from config
+
+
 def test_defaults_pulled_from_config() -> None:
     sdk = DebateSDK("config")
     handles = {"pro": FakeHandle("pro"), "con": FakeHandle("con")}
