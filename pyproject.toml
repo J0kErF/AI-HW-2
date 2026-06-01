@@ -7,7 +7,7 @@ requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [{ name = "TODO: Name", email = "mohammad@mryosef.com" }]
 dependencies = [
-    "anthropic>=0.40.0",
+    "google-genai>=0.3.0",
     "tavily-python>=0.5.0",
     "duckduckgo-search>=6.0.0",
     "rich>=13.7.0",

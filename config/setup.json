@@ -9,9 +9,10 @@
       "con": "A relentless critic who concedes nothing and exposes every weak claim."
     }
   },
+  "provider": "gemini",
   "models": {
-    "debater": "claude-sonnet-4-6",
-    "moderator": "claude-opus-4-8"
+    "debater": "gemini-2.5-flash",
+    "moderator": "gemini-2.5-pro"
   },
   "search": {
     "provider": "tavily",
