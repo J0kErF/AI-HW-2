@@ -9,11 +9,11 @@
       "con": "A relentless critic who concedes nothing and exposes every weak claim."
     }
   },
-  "provider": "nvidia",
+  "provider": "gemini",
   "nvidia_base_url": "https://integrate.api.nvidia.com/v1",
   "models": {
-    "debater": "deepseek-ai/deepseek-v4-flash",
-    "moderator": "deepseek-ai/deepseek-v4-flash"
+    "debater": "gemini-2.5-flash",
+    "moderator": "gemini-2.5-flash"
   },
   "search": {
     "provider": "duckduckgo",

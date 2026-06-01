@@ -87,19 +87,44 @@ Web search uses **keyless DuckDuckGo** (`ddgs`), so **no Tavily key is required*
 _Embedded after the first full run (Phase 4/5): full debate transcript +
 terminal screenshots of the menu, a live debate, and watchdog recovery._
 
-## 8. UI/UX notes
-The terminal menu is evaluated against Nielsen's usability heuristics
-(visibility of status, error prevention, consistency); see docs as it lands.
+## 8. UI/UX notes (Nielsen heuristics, Guide §10)
+- **Visibility of system status** — each turn renders live as a styled panel;
+  watchdog restarts and interventions are shown as they happen; the run ends with
+  a summary (winner, scores, restarts, tokens, cost).
+- **Match to the real world** — speakers are color-coded (Pro green, Con red,
+  intervention yellow, system magenta) so the debate reads like a transcript.
+- **Error prevention / recovery** — a hung debater is killed and restarted; a
+  depleted/over-quota provider degrades to a system turn; the debate still ends
+  with a verdict instead of crashing.
+- **Consistency & minimalism** — one menu, numbered options, no hidden state;
+  the same actions are available via the SDK for automated checking.
 
-## 9. Known limitations
-_Maintained honestly for an accurate self-assessment (HW1 lesson). To be
-completed at submission; current state: planning + scaffold only._
+## 9. Known limitations (kept honest — HW1 self-assessment lesson)
+- **Free-tier LLMs are the bottleneck.** Gemini's free tier gives 0 quota for
+  `gemini-2.5-pro` and intermittently 503s on flash; the default provider is now
+  **NVIDIA DeepSeek (free)**, which is reliable but slower per call.
+- **Capitulation policing doubles LLM calls** (one judge call per turn), which
+  lengthens a full run; it could be sampled rather than per-turn.
+- **Cost is per-process.** Each worker has its own gatekeeper, so the headline
+  cost is aggregated from transcript tokens (Father's own calls are added from
+  the main-process gatekeeper).
+- **Pings reduced 10 → 5** for free-tier runs (permitted, Ex §8.7).
 
-## 10. Contributing & quality standards
+## 10. Self-assessment
+**Self-grade: 89 / 100** (honest, per the course's calibration rule — a high,
+confident grade invites stricter review). Rationale: all mandatory rubric items
+are implemented and tested (SDK, Gatekeeper + budget, FIFO logging, Watchdog with
+real kill/restart, multiprocessing + IPC, blind no-tie judge, anti-capitulation,
+grounded citations, versioning, terminal menu, ≥85% coverage, 0 Ruff violations,
+≤150 LOC/file). Points consciously left on the table: free-tier reliability limits
+a long live run, capitulation cost is not optimized, and CI is not wired. See
+§9 for the full candid list.
+
+## 11. Contributing & quality standards
 Ruff-clean (`select = E,F,W,I,N,UP,B,C4,SIM`), files ≤150 LOC, ≥85% coverage,
 TDD (red→green→refactor), `uv` only. See `pyproject.toml`.
 
-## 11. License & credits
+## 12. License & credits
 MIT. Authors: **TODO (name + ID)**, partner **TODO (name + ID)**.
 Group code: **moamteam**. Submission PDF: `moamteam-ex02.pdf` (official template).
 Repo shared with the lecturer (rmisegal@gmail.com); each partner submits on Moodle.

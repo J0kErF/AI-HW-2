@@ -6,6 +6,8 @@ DuckDuckGo). Saves results/transcript.{txt,json}. Makes real, billable calls.
 Run with: uv run python scripts/run_debate.py
 """
 
+import sys
+
 from rich.console import Console
 
 from debate_arena.cli.render import make_event_renderer
@@ -14,6 +16,9 @@ from debate_arena.services.reporting import export_transcript
 
 
 def main() -> None:
+    # Force UTF-8 so model emoji/unicode never crash the Windows console.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     console = Console()
     sdk = DebateSDK("config")
     topic = sdk._config.get("setup", "debate", "default_topic")

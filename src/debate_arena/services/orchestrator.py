@@ -10,6 +10,7 @@ unit-testable with fakes, while production uses real OS processes + IPC queues
 See docs/PRD_debate_orchestration.md.
 """
 
+import contextlib
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
@@ -73,14 +74,19 @@ class DebateOrchestrator:
         turn = self._request_with_recovery(handles, stance, message, result)
         issues = self._father.validate(turn)
         if issues:
-            self._on_event({"type": "validation", "stance": stance, "issues": issues})
+            self._emit({"type": "validation", "stance": stance, "issues": issues})
         if self._father.detect_capitulation(turn, Stance(stance)):
             intervention = self._father.intervene(Stance(stance), "Re-assert your stance.")
             result.interventions.append(intervention)
-            self._on_event(intervention)
+            self._emit(intervention)
         result.transcript.append(turn)
-        self._on_event(turn)
+        self._emit(turn)
         return turn
+
+    def _emit(self, event: dict[str, Any]) -> None:
+        """Send an event to the sink; a sink/rendering error must not abort the debate."""
+        with contextlib.suppress(Exception):  # UI/observer failure is never fatal
+            self._on_event(event)
 
     def _request_with_recovery(self, handles: dict[str, Any], stance: str,
                                message: dict[str, Any], result: DebateResult) -> dict[str, Any]:

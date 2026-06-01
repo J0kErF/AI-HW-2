@@ -98,6 +98,17 @@ def test_capitulation_records_intervention() -> None:
     assert len(result.interventions) == 2  # one per turn flagged
 
 
+def test_event_sink_error_is_non_fatal() -> None:
+    def boom(_event):
+        raise UnicodeEncodeError("charmap", "x", 0, 1, "bad")
+
+    handles = {"pro": FakeHandle("pro"), "con": FakeHandle("con")}
+    orch = DebateOrchestrator(FakeFather(), Watchdog(1, 3, 2), 1, lambda s: handles[s], boom)
+    result = orch.run("Topic")  # rendering errors must not abort the debate
+    assert result.verdict is not None
+    assert len(result.transcript) == 2
+
+
 def test_handles_terminated_on_shutdown() -> None:
     orch, handles = _orch(FakeFather(), pings=1)
     orch.run("Topic")
