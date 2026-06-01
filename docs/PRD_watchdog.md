@@ -23,11 +23,13 @@ heartbeat** and **per-call timeouts**, and — critically — on failure it
 ## 3. Interface
 ```python
 class Watchdog:
-    def supervise(self, proc, name, on_dead): ...   # register a process
-    def heartbeat(self, name) -> None: ...          # called by/for the child
-    def check(self) -> list[str]: ...               # names judged hung/dead
-    def restart(self, name) -> Process: ...         # kill + respawn
+    def supervise(self, name, spawn, on_dead=None): ...  # start + register; spawn() (re)creates the process
+    def heartbeat(self, name) -> None: ...               # called by/for the child
+    def check(self) -> list[str]: ...                    # names judged hung/dead
+    def restart(self, name) -> Process: ...              # terminate + respawn via spawn()
 ```
+> A `spawn()` factory (rather than a bare process handle) is what makes a *real*
+> restart possible — the watchdog can recreate a killed process.
 
 ## 4. Input / output
 - **Input:** process handles, `timeout_seconds`, `heartbeat_interval`,
