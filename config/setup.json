@@ -1,0 +1,30 @@
+{
+  "version": "1.00",
+  "debate": {
+    "default_topic": "Nuclear energy should be a core part of the climate solution",
+    "pings_per_side": 10,
+    "min_sources_per_argument": 1,
+    "personas": {
+      "pro": "A relentless advocate who concedes nothing and reframes every objection.",
+      "con": "A relentless critic who concedes nothing and exposes every weak claim."
+    }
+  },
+  "models": {
+    "debater": "claude-sonnet-4-6",
+    "moderator": "claude-opus-4-8"
+  },
+  "search": {
+    "provider": "tavily",
+    "fallback_provider": "duckduckgo",
+    "results_per_query": 3
+  },
+  "timeouts": {
+    "agent_call_seconds": 60,
+    "search_call_seconds": 30
+  },
+  "watchdog": {
+    "heartbeat_interval_seconds": 5,
+    "max_missed_heartbeats": 3,
+    "max_restarts": 2
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "version": "1.00",
+  "log_dir": "logs",
+  "level": "INFO",
+  "fifo": {
+    "max_files": 20,
+    "max_lines_per_file": 500,
+    "base_name": "debate"
+  },
+  "console": {
+    "enabled": true,
+    "rich": true
+  }
+}
