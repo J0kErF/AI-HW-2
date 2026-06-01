@@ -20,7 +20,7 @@
     "results_per_query": 3
   },
   "timeouts": {
-    "agent_call_seconds": 60,
+    "agent_call_seconds": 120,
     "search_call_seconds": 30
   },
   "watchdog": {

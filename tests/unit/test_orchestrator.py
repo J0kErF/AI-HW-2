@@ -82,6 +82,16 @@ def test_timeout_triggers_watchdog_restart() -> None:
     assert len(result.transcript) == 2  # still completes
 
 
+def test_exhausted_restarts_conclude_gracefully() -> None:
+    # Pro always times out; watchdog restart budget gets exhausted across pings.
+    handles = {"pro": FakeHandle("pro", fail_times=99), "con": FakeHandle("con")}
+    orch = DebateOrchestrator(FakeFather(), Watchdog(1, 3, 1), 2, lambda s: handles[s])
+    result = orch.run("Topic")  # must NOT raise WatchdogError
+    assert result.verdict is not None
+    assert len(result.transcript) == 4  # pro turns degrade to system "(no response)"
+    assert any(t.get("type") == "system" for t in result.transcript)
+
+
 def test_capitulation_records_intervention() -> None:
     orch, _ = _orch(FakeFather(capitulate=True), pings=1)
     result = orch.run("Topic")

@@ -15,6 +15,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from debate_arena.constants import Stance
+from debate_arena.services.watchdog import WatchdogError
 
 _SIDES = ("pro", "con")
 
@@ -88,7 +89,10 @@ class DebateOrchestrator:
                 return handles[stance].request(message)
             except TimeoutError:
                 result.restarts.append(stance)
-                handles[stance] = self._wd.restart(stance)
+                try:
+                    handles[stance] = self._wd.restart(stance)
+                except WatchdogError:
+                    break  # restart budget exhausted -> conclude this side gracefully
         return {
             "turn_id": f"{stance}-timeout", "stance": stance, "type": "system",
             "claim": "(no response)", "sources": [], "responding_to": message.get("turn_id"),
