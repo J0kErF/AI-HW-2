@@ -194,6 +194,7 @@ Ruff-clean (`select = E,F,W,I,N,UP,B,C4,SIM`), files ≤150 LOC, ≥85% coverage
 TDD (red→green→refactor), `uv` only. See `pyproject.toml`.
 
 ## 12. License & credits
-MIT. Authors: **Mohammad Yosef** (ID REDACTED), partner **Amear Abu Farekh** (ID REDACTED).
-Group code: **moamteam**. Submission PDF: `moamteam-ex02.pdf` (official template).
+MIT. Authors: **Mohammad Yosef**, partner **Amear Abu Farekh** (IDs in the
+submission PDF, not published here). Group code: **moamteam**.
+Submission PDF: `moamteam-ex02.pdf` (official template).
 Repo shared with the lecturer (rmisegal@gmail.com); each partner submits on Moodle.

@@ -28,3 +28,6 @@ results/*.txt
 Thumbs.db
 .idea/
 .vscode/
+
+# Submission PDF contains private IDs — keep local, never publish
+moamteam-ex02.pdf
