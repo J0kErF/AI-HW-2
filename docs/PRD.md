@@ -42,8 +42,11 @@ Course grader (primary), future maintainers/extenders (secondary).
 | Cost awareness | Full token/cost accounting | README cost table (tokens in/out, $/M, per model) + Gatekeeper-enforced budget cap |
 | Professional envelope | All §17 final-checklist items present | SDK, Gatekeeper, versioning, FIFO logs, diagrams, Prompt Book all delivered |
 
-> **Budget exception (allowed):** pings may be reduced from 10 → 5 if API budget
-> is constrained; this **must** be stated explicitly in the README (Ex §8.7).
+> **Budget note (honest):** `pings_per_side` is configurable. The captured live run
+> uses **5** (below the ≥10 target) because the free Gemini tier caps **20
+> requests/day/model** and a full debate makes ~2 calls/turn — a 10-ping run isn't
+> completable on the free tier in a day. Stated explicitly in the README; set to 10
+> on a paid key or the NVIDIA provider for a literal ≥10 run.
 
 ---
 

@@ -81,5 +81,5 @@ Work order is mandated by Guide §2.5: **docs approved before any code.**
 - [x] **Group code**: **`moamteam`** (confirmed). Submission PDF: `moamteam-ex02.pdf`.
 - [x] **LLM provider**: **Google Gemini, free tier**, `gemini-2.5-flash` for debaters AND moderator (`gemini-2.5-pro` has 0 free quota).
 - [x] **Web search**: **DuckDuckGo (`ddgs`), keyless / free** — no Tavily key required (Tavily kept optional via config).
-- [x] **Pings**: **5 per side** (reduced from 10 for the free tier; permitted by Ex §8.7, noted in README).
+- [x] **Pings**: **5 per side** (below the ≥10 target; a deliberate free-tier choice — the 20-req/day Gemini cap can't finish a longer run — noted honestly in README §6/§9).
 - [x] **Default topic**: "Nuclear energy should be a core part of the climate solution" (configurable).

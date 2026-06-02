@@ -1,4 +1,4 @@
-"""Keyboard-driven terminal menu (Ex §8.6/§8.7) — visual I/O, omitted from coverage.
+"""Keyboard-driven terminal menu — visual I/O, omitted from coverage.
 
 The grader can drive every feature from this menu, or call DebateSDK directly for
 automated checking. The menu holds no business logic — it delegates to the SDK and

@@ -76,9 +76,13 @@ Runs on the **free Google AI (Gemini) tier** with `gemini-2.5-flash` for both
 debaters and the moderator (the free tier grants **0 quota for `gemini-2.5-pro`**).
 Web search uses **keyless DuckDuckGo** (`ddgs`), so **no Tavily key is required**.
 
-> **Budget note (required by Ex §8.7):** pings are set to **5 per side** (reduced
-> from 10) to fit the free tier. This is explicitly permitted and not penalized.
-> Cost is aggregated from each turn's token usage (see `get_cost_report`).
+> **Budget note (honest):** the assignment's norm is **≥10 pings per side**; we
+> deliberately run **5 per side** to fit the free tier. The free Gemini tier caps
+> **20 requests/day/model** (`GenerateRequestsPerDayPerProjectPerModel-FreeTier`),
+> and a full debate makes ~2 calls/turn (debater + capitulation check), so even a
+> 5-ping run brushes the daily cap (the captured run's last turn degraded on it,
+> §7). `pings_per_side` is a single config knob — set it to 10 on a paid key or the
+> NVIDIA provider for a literal ≥10 run. Cost is aggregated per turn (`get_cost_report`).
 
 Measured on the captured full run (`docs/sample_run/`, 5 pings/side, the topic
 below). Cost is aggregated from each turn's token usage and priced from
@@ -131,17 +135,31 @@ the singular, indispensable keystone for comprehensive, rapid decarbonization.
 > commit the verbatim **captured terminal output** (`docs/sample_run/`), which is
 > reproducible with `uv run python scripts/run_debate.py`.
 
-## 8. UI/UX notes (Nielsen heuristics, Guide §10)
-- **Visibility of system status** — each turn renders live as a styled panel;
-  watchdog restarts and interventions are shown as they happen; the run ends with
-  a summary (winner, scores, restarts, tokens, cost).
-- **Match to the real world** — speakers are color-coded (Pro green, Con red,
-  intervention yellow, system magenta) so the debate reads like a transcript.
-- **Error prevention / recovery** — a hung debater is killed and restarted; a
-  depleted/over-quota provider degrades to a system turn; the debate still ends
-  with a verdict instead of crashing.
-- **Consistency & minimalism** — one menu, numbered options, no hidden state;
-  the same actions are available via the SDK for automated checking.
+## 8. UI/UX notes (Nielsen's 10 heuristics, Guide §10)
+1. **Visibility of system status** — each turn renders live as a styled panel;
+   watchdog restarts/interventions show as they happen; the run ends with a
+   summary (winner, scores, restarts, tokens, cost).
+2. **Match between system and the real world** — speakers are color-coded (Pro
+   green, Con red, intervention yellow, system magenta) so it reads like a
+   transcript; plain-language labels, no jargon.
+3. **User control & freedom** — every prompt offers a clear exit (`q) Quit`); the
+   Run prompt accepts the default topic on empty input, so a wrong keystroke is
+   never a trap.
+4. **Consistency & standards** — one numbered menu, stable key bindings, the same
+   actions exposed identically via the `DebateSDK`.
+5. **Error prevention** — config is validated on startup (version + required
+   keys); invalid menu input is re-prompted rather than crashing.
+6. **Recognition rather than recall** — every option is listed on screen with its
+   key; the user never has to remember commands or prior state.
+7. **Flexibility & efficiency of use** — drive it interactively (menu) or
+   headlessly (SDK / `scripts/run_debate.py`); all knobs live in `config/`.
+8. **Aesthetic & minimalist design** — `rich` panels show only the turn, speaker,
+   claim, and sources; no decorative clutter.
+9. **Help users recognize, diagnose & recover from errors** — a hung debater is
+   killed and restarted; an over-quota provider degrades to a labelled system turn
+   with the error reason; the debate still ends with a verdict instead of crashing.
+10. **Help & documentation** — this README, `docs/PRD_*.md`, and `--`/menu labels
+    document every feature; the Prompt Book (`docs/PROMPTS.md`) records the design.
 
 ## 9. Known limitations (kept honest — HW1 self-assessment lesson)
 - **Free-tier LLMs are the bottleneck.** The default provider is **free-tier
@@ -155,7 +173,10 @@ the singular, indispensable keystone for comprehensive, rapid decarbonization.
 - **Cost is per-process.** Each worker has its own gatekeeper, so the headline
   cost is aggregated from transcript tokens (Father's own calls are added from
   the main-process gatekeeper).
-- **Pings reduced 10 → 5** for free-tier runs (permitted, Ex §8.7).
+- **Pings run at 5/side, below the ≥10 norm** — a deliberate free-tier choice
+  (the 20-req/day cap can't complete a longer run), not a code limit; it's one
+  config value (`debate.pings_per_side`). This is the one rubric item not run at
+  the nominal target; everything else is met.
 
 ## 10. Self-assessment
 **Self-grade: 89 / 100** (honest, per the course's calibration rule — a high,

@@ -13,7 +13,8 @@ Communication, and enabling forced restart by the Watchdog.
 ## 2. Specific requirements
 - Maintain debate **state**: topic, round index, per-side ping counts, full
   ordered transcript, intervention log.
-- Drive the loop until **≥10 pings per side** (configurable; 5 allowed for budget).
+- Drive the loop for `pings_per_side` (target **≥10**; the free-tier capture uses
+  **5** — see PRD.md budget note). The count is a single config value.
 - For each turn: request → receive JSON → **validate** → enforce rules → log →
   route to opponent as context.
 - Enforce **mutual reference**: a rebuttal's `responding_to` must equal the
