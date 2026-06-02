@@ -1,6 +1,6 @@
 """Real process transport for debaters — multiprocessing + IPC (Guide §15).
 
-Each debater runs in its own OS process (Ex §8.2: "agent = process"), receiving
+Each debater runs in its own OS process (the assignment brief: "agent = process"), receiving
 opponent turns on a request queue and returning its turn on a response queue.
 This module is integration glue (spawns processes, builds live clients) and is
 exercised by the live run / smoke test rather than unit tests.

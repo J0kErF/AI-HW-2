@@ -4,9 +4,9 @@
 
 ## 1. Description & theory
 The orchestrator implements a **hierarchical, hub-and-spoke** debate: the Father
-is the only hub; debaters are spokes. This guarantees Ex §8.3.7 (every message
+is the only hub; debaters are spokes. This guarantees the brief's routing rule (every message
 `child → father → child`) and gives a single place to enforce rules, log, and
-account for cost. Debaters run as **separate OS processes** (Ex §8.2, Guide §15)
+account for cost. Debaters run as **separate OS processes** (per the brief; Guide §15)
 communicating over `multiprocessing.Queue` — modeling true Inter-Process
 Communication, and enabling forced restart by the Watchdog.
 

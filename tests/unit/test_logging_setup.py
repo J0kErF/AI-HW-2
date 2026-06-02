@@ -1,4 +1,4 @@
-"""Tests for FIFO line-rotating logging (Ex §8.6, Guide §7.3)."""
+"""Tests for FIFO line-rotating logging (the assignment brief, Guide §7.3)."""
 
 import logging
 

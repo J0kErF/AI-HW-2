@@ -1,4 +1,4 @@
-"""Watchdog — keep-alive supervision with kill & restart (Ex §8.6).
+"""Watchdog — keep-alive supervision with kill & restart (the assignment brief).
 
 Monitors agent processes via heartbeats and a timeout derived from
 heartbeat_interval × max_missed. A hung or dead process is terminated and

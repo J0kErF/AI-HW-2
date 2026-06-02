@@ -4,7 +4,7 @@
 
 ## 1. Description & theory
 Every external API call (LLM + web search) **must** flow through one central
-`ApiGatekeeper` (Guide §5.1; Ex §8.6 "Gatekeeper — economic blocking layer").
+`ApiGatekeeper` (Guide §5.1; the assignment brief "Gatekeeper — economic blocking layer").
 It is the difference between *measuring* cost (a token tracker) and *enforcing*
 it. The Gatekeeper applies rate limits, queues on saturation, retries transient
 failures, **hard-stops on budget exhaustion**, and logs every call.

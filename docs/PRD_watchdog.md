@@ -3,7 +3,7 @@
 > Version 1.00 · Parent: [PRD.md](PRD.md)
 
 ## 1. Description & theory
-Every autonomous-agent project must assume an agent can hang (Ex §8.6). The
+Every autonomous-agent project must assume an agent can hang (the assignment brief). The
 Watchdog is a supervisor that monitors debater processes via a **keep-alive
 heartbeat** and **per-call timeouts**, and — critically — on failure it
 **kills and restarts** the process (not merely "skips it"). This is the

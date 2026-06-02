@@ -3,7 +3,7 @@
 > Version 1.00 · Parent: [PRD.md](PRD.md)
 
 ## 1. Description & theory
-Grounding arguments in **real** web evidence is mandatory (Ex §8.3.5). The
+Grounding arguments in **real** web evidence is mandatory (the assignment brief). The
 WebSearchTool is the agents' only path to the outside world; it returns real
 sources that become the `sources[]` of a debate message. It is a concrete
 instance of the course's "Tool" concept and routes through the Gatekeeper.

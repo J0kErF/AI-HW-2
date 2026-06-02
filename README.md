@@ -76,8 +76,9 @@ Runs on the **free Google AI (Gemini) tier** with `gemini-2.5-flash` for both
 debaters and the moderator (the free tier grants **0 quota for `gemini-2.5-pro`**).
 Web search uses **keyless DuckDuckGo** (`ddgs`), so **no Tavily key is required**.
 
-> **Budget note (honest):** the assignment's norm is **≥10 pings per side**; we
-> deliberately run **5 per side** to fit the free tier. The free Gemini tier caps
+> **Budget note (honest):** the assignment's norm is **≥10 pings per side**; this
+> submission **runs 5 per side as an explicit, deliberate choice** to fit the free
+> tier (not a code limit). The free Gemini tier caps
 > **20 requests/day/model** (`GenerateRequestsPerDayPerProjectPerModel-FreeTier`),
 > and a full debate makes ~2 calls/turn (debater + capitulation check), so even a
 > 5-ping run brushes the daily cap (the captured run's last turn degraded on it,
@@ -173,10 +174,10 @@ the singular, indispensable keystone for comprehensive, rapid decarbonization.
 - **Cost is per-process.** Each worker has its own gatekeeper, so the headline
   cost is aggregated from transcript tokens (Father's own calls are added from
   the main-process gatekeeper).
-- **Pings run at 5/side, below the ≥10 norm** — a deliberate free-tier choice
-  (the 20-req/day cap can't complete a longer run), not a code limit; it's one
-  config value (`debate.pings_per_side`). This is the one rubric item not run at
-  the nominal target; everything else is met.
+- **Pings run at 5/side, below the ≥10 norm — by explicit choice.** The 20-req/day
+  free-tier cap can't complete a longer run, so we deliberately set
+  `debate.pings_per_side = 5`; it's one config value, not a code limit. This is the
+  one rubric item run below the nominal target; everything else is met.
 
 ## 10. Self-assessment
 **Self-grade: 89 / 100** (honest, per the course's calibration rule — a high,

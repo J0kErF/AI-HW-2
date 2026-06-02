@@ -56,20 +56,20 @@ Course grader (primary), future maintainers/extenders (secondary).
   child↔child communication.** Every message is `child → father → child`.
 - **FR-2 Genuine opposition.** Each debater runs a *distinct persona/skill* and a
   system contract that forbids capitulation. If a debater is "swept" toward the
-  opponent, the **Father intervenes and re-asserts its role** (Ex §9).
+  opponent, the **Father intervenes and re-asserts its role** (the assignment brief).
 - **FR-3 Mutual reference.** Each rebuttal MUST address the opponent's specific
   prior argument. Enforced via a required `responding_to` field in the schema —
-  no parallel monologues (Ex §8.3.4).
+  no parallel monologues (the assignment brief).
 - **FR-4 Web grounding (mandatory).** Debaters call a **real web-search tool**;
-  arguments cite real sources. No fabricated citations (Ex §8.3.5).
+  arguments cite real sources. No fabricated citations (the assignment brief).
 - **FR-5 Structured IPC.** All inter-agent messages are **strict JSON**, schema-
-  validated, separating reasoning from output, and logged (Ex §8.3.8).
+  validated, separating reasoning from output, and logged (the assignment brief).
 - **FR-6 Judge.** After the debate, the Father judges on **persuasion ability
   only** — it is **blind to the topic's factual truth** ("the truth is a lie"
-  game, Ex §9). **Lies are allowed**; the opponent is expected to catch them.
+  game, the assignment brief). **Lies are allowed**; the opponent is expected to catch them.
   Output: winner + per-side score + written justification. **Never a tie.**
 - **FR-7 Real LLM.** The debate content is produced by a real LLM, driven by
-  **Python** — not hardcoded text, not "Claude-CLI-only" (Ex §8.4).
+  **Python** — not hardcoded text, not "Claude-CLI-only" (the assignment brief).
 - **FR-8 Configurable topic & rounds.** Topic, ping count, models, timeouts,
   budgets — all from `config/`, never hardcoded.
 

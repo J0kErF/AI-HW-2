@@ -1,4 +1,4 @@
-"""Web search tool — mandatory grounding (Ex §8.3.5; docs/PRD_web_search.md).
+"""Web search tool — mandatory grounding (the assignment brief; docs/PRD_web_search.md).
 
 Provider-agnostic: a `provider(query, k) -> list[dict]` callable is injected and
 wrapped by the gatekeeper. Results are normalized to `Source`; any provider

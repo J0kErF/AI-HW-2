@@ -1,4 +1,4 @@
-"""Moderator ("Father") — orchestrates turns and judges (Ex §8.1, §9).
+"""Moderator ("Father") — orchestrates turns and judges (per the assignment brief).
 
 The Father is the only hub: it validates the JSON contract (citation +
 `responding_to`), intervenes when a debater is swept, and finally judges on
@@ -54,7 +54,7 @@ class ModeratorAgent(BaseAgent):
         return issues
 
     def intervene(self, stance: Stance, reason: str) -> dict[str, Any]:
-        """Issue an intervention re-asserting a debater's role (Ex §9)."""
+        """Issue an intervention re-asserting a debater's role (the assignment brief)."""
         return {"type": MessageType.INTERVENTION.value, "stance": stance.value, "reason": reason}
 
     def detect_capitulation(self, turn: dict[str, Any], stance: Stance) -> bool:

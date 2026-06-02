@@ -176,7 +176,7 @@ sequenceDiagram
 ## 5. Architecture Decision Records (ADRs)
 
 - **ADR-1: multiprocessing over asyncio/threads.** The assignment frames *agent =
-  process* and the final phase as "Python managing three processes" (Ex §8.2/§8.6,
+  process* and the final phase as "Python managing three processes" (the assignment brief,
   Guide §15). Although the workload is I/O-bound, true processes give real IPC and
   let the Watchdog **kill & restart** a hung agent (impossible to force-kill a
   coroutine). *Trade-off:* higher overhead & serialization cost — accepted for
@@ -191,7 +191,7 @@ sequenceDiagram
 - **ADR-4: Pydantic for the JSON contract.** Strict schema validation of every
   inter-agent message. *Trade-off:* a dependency; gains crisp edge-case tests.
 - **ADR-5: Judge is topic-blind.** The judge prompt receives only the rules +
-  transcript, never a "correct answer," scoring persuasion only (Ex §9).
+  transcript, never a "correct answer," scoring persuasion only (the assignment brief).
 
 ---
 

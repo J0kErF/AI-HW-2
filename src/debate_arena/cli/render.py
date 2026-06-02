@@ -2,7 +2,7 @@
 
 Produces an `on_event` callback the orchestrator calls for each turn, giving the
 grader a live, color-coded debate where Father / Pro / Con / Watchdog / System
-messages are visually distinct (Ex §8.7, Guide §10).
+messages are visually distinct (the assignment brief, Guide §10).
 """
 
 from typing import Any

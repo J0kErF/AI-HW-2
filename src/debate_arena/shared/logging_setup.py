@@ -1,4 +1,4 @@
-"""Built-in FIFO log rotation (Ex §8.6, Guide §7.3).
+"""Built-in FIFO log rotation (the assignment brief, Guide §7.3).
 
 Rotates the log every `max_lines_per_file` lines, keeping at most `max_files`
 files (oldest evicted first — FIFO). Configuration comes from
