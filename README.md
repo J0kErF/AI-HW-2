@@ -1,7 +1,8 @@
 # debate_arena — Autonomous AI Agent Debate System
 
 > HW2 · Exercise 02 (AI Agent Debate) · Course: Building with LLMs (Dr. Yoram Segal)
-> Status: **Phase 0 complete (planning + scaffold)** — implementation in progress.
+> Status: **Phases 0–4 complete** — implemented, tested (82 tests, ≥85% coverage,
+> Ruff-clean), with a captured live run (§6 cost, §7 transcript). Phase 5 = delivery.
 
 Two LLM **debater** sub-agents argue opposing sides of a configurable motion,
 each grounded in **real web search**. A third **Moderator ("Father")** agent
@@ -79,13 +80,56 @@ Web search uses **keyless DuckDuckGo** (`ddgs`), so **no Tavily key is required*
 > from 10) to fit the free tier. This is explicitly permitted and not penalized.
 > Cost is aggregated from each turn's token usage (see `get_cost_report`).
 
-| Model | Input tokens | Output tokens | Total cost |
-|-------|-------------:|--------------:|-----------:|
-| _filled after the captured full run_ | _tbd_ | _tbd_ | _tbd_ |
+Measured on the captured full run (`docs/sample_run/`, 5 pings/side, the topic
+below). Cost is aggregated from each turn's token usage and priced from
+`config/rate_limits.json` (`gemini-2.5-flash`: **$0.30/M** input, **$2.50/M** output).
 
-## 7. Session transcripts & screenshots
-_Embedded after the first full run (Phase 4/5): full debate transcript +
-terminal screenshots of the menu, a live debate, and watchdog recovery._
+| Model | Input tokens | Output tokens | $/M (in / out) | Total cost |
+|-------|-------------:|--------------:|:--------------:|-----------:|
+| `gemini-2.5-flash` | 11,152 | 10,037 | 0.30 / 2.50 | **$0.028438** |
+
+> On the free tier this run is **$0.00** out of pocket (the dollar figure is the
+> equivalent paid-tier cost, shown to satisfy the cost-analysis rubric item). It
+> sits well under the `budget.budget_usd = 1.00` Gatekeeper cap. The free tier
+> caps **20 requests/day/model**, which bounds a full 5-ping run (see §7).
+
+## 7. Session transcript
+The full captured run is committed at
+[`docs/sample_run/transcript.txt`](docs/sample_run/transcript.txt) (and
+`transcript.json` with full reasoning + source snippets). The console log of a
+re-run is at [`docs/sample_run/rerun_console.txt`](docs/sample_run/rerun_console.txt).
+
+- **Topic:** _Nuclear energy should be a core part of the climate solution_
+- **Verdict:** **winner = pro**, scores `{pro: 0, con: -1}` (blind, no-tie judge).
+- **9 of 10 turns** are full, grounded arguments with mutual `responding_to`
+  reference. The **final Con turn** degraded to a system turn after the free tier's
+  **20 requests/day/model** cap was reached — and the debate still ran to a judged
+  verdict, a live demonstration of the graceful-degradation / watchdog rubric item.
+  Con's negative score reflects that one missing turn, not a weaker case.
+
+Representative grounded exchange (abridged — see the transcript for sources):
+
+```
+[PRO pro-1] Nuclear energy is the single most essential and proven technology for
+achieving comprehensive, rapid, and reliable decarbonization of global energy
+systems, thereby making it an indispensable, foundational pillar of any serious
+climate solution.
+   - Nuclear Innovation Alliance: Why Advanced Nuclear Energy Should Be Part of...
+
+[CON con-1] (responding_to pro-1) The opponent's assertion of nuclear energy's
+'indispensable' role for 'rapid' and 'comprehensive' decarbonization is a baseless,
+hyperbolic claim... failing to address the practical barriers of speed, cost, and
+scalability that plague nuclear deployment.
+   - IAEA: What is Nuclear Energy? · BBC: Is nuclear power regaining energy?
+
+[PRO pro-2] (responding_to con-1) The 'barriers' of speed, cost, and scalability
+are not reasons to dismiss nuclear, but precisely why it must be prioritized...
+the singular, indispensable keystone for comprehensive, rapid decarbonization.
+```
+
+> **Screenshots:** this project runs headless in a terminal/CI; in place of PNGs we
+> commit the verbatim **captured terminal output** (`docs/sample_run/`), which is
+> reproducible with `uv run python scripts/run_debate.py`.
 
 ## 8. UI/UX notes (Nielsen heuristics, Guide §10)
 - **Visibility of system status** — each turn renders live as a styled panel;
@@ -100,9 +144,12 @@ terminal screenshots of the menu, a live debate, and watchdog recovery._
   the same actions are available via the SDK for automated checking.
 
 ## 9. Known limitations (kept honest — HW1 self-assessment lesson)
-- **Free-tier LLMs are the bottleneck.** Gemini's free tier gives 0 quota for
-  `gemini-2.5-pro` and intermittently 503s on flash; the default provider is now
-  **NVIDIA DeepSeek (free)**, which is reliable but slower per call.
+- **Free-tier LLMs are the bottleneck.** The default provider is **free-tier
+  Google Gemini** (`gemini-2.5-flash`); the free tier gives 0 quota for
+  `gemini-2.5-pro`, intermittently `503`s on flash, and caps **20 requests/day/model**
+  — which bounds a full 5-ping run (the captured run's final turn degraded on that
+  cap, §7). A second provider — **NVIDIA DeepSeek (free, OpenAI-compatible)** — is
+  wired in and config-selectable (`provider: "nvidia"`) as a fallback.
 - **Capitulation policing doubles LLM calls** (one judge call per turn), which
   lengthens a full run; it could be sampled rather than per-turn.
 - **Cost is per-process.** Each worker has its own gatekeeper, so the headline

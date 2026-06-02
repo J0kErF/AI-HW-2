@@ -15,7 +15,7 @@ Work order is mandated by Guide §2.5: **docs approved before any code.**
 - [x] `docs/PRD_gatekeeper.md`
 - [x] `docs/PRD_web_search.md`
 - [x] `docs/PROMPTS.md` — prompt/decision log (living document)
-- [ ] **Gate:** team approves all docs · DoD: sign-off recorded in PROMPTS.md
+- [x] **Gate:** team approves all docs · DoD: sign-off recorded in PROMPTS.md (see `PROMPTS.md` → **D-GATE**)
 
 ## Phase 1 — Core engineering (OOP utilities, TDD)
 - [x] `shared/version.py` (=1.00) + startup config-version validation · DoD: test asserts mismatch raises
@@ -36,7 +36,7 @@ Work order is mandated by Guide §2.5: **docs approved before any code.**
 - [x] `services/base_agent.py` BaseAgent (act/parse_json/handle_error/_respond/_safe_parse) · DoD: malformed-JSON + token accounting tested (92%)
 - [x] `services/debater.py` DebaterAgent (stance, persona, anti-capitulation, cites sources, `responding_to`) · DoD: rebuttal references prior turn (100%)
 - [x] `services/moderator.py` ModeratorAgent/Father (validate, intervene, capitulation, judge — blind, no tie + tie-break) · DoD: tie never returned (93%)
-- [ ] real search providers (Tavily/DuckDuckGo) behind the injected `provider` callable — wire in Phase 3 with the SDK
+- [x] real search providers (Tavily/DuckDuckGo) behind the injected `provider` callable — delivered in Phase 3 (`services/search_providers.py`, config-selected)
 
 > **Phase 2 core complete.** Global coverage **86.9%** ≥ 85% gate. 62 tests pass.
 
@@ -52,16 +52,16 @@ Work order is mandated by Guide §2.5: **docs approved before any code.**
 > Resilience fix: Father LLM calls degrade gracefully (`_safe_respond`); transient
 > 429/5xx mapped to gatekeeper retry; JSON fence-stripping for model replies.
 
-### Phase 3 follow-ups (carry into Phase 5)
-- [ ] Aggregate cost across worker processes from each turn's `tokens` field (per-process gatekeepers don't share state) → real cost table.
-- [ ] Free-tier note: `gemini-2.5-pro` has 0 free quota; using `gemini-2.5-flash`. 503s are intermittent on free tier — paid tier or pings=5 for a clean full run.
+### Phase 3 follow-ups (resolved in Phase 4)
+- [x] Aggregate cost across worker processes from each turn's `tokens` field (per-process gatekeepers don't share state) → real cost table. Done in `services/reporting.py` (100% tested); cost table filled in README §6.
+- [x] Free-tier note: `gemini-2.5-pro` has 0 free quota; using `gemini-2.5-flash`. 503s are intermittent on free tier — set **pings = 5** for the captured run (README §6/§9).
 
 ## Phase 4 — UX
 - [x] `cli/menu.py` keyboard terminal menu (Run / Replay / Cost / Config / Quit) · DoD: every feature reachable; smoke-tested
 - [x] `cli/render.py` `rich` rendering: distinct styles per Pro/Con/intervention/system/validation/moderation
 - [x] `services/reporting.py` cost aggregation (cross-process, from transcript tokens) + transcript export to `results/` (txt + json) · DoD: tested (100%)
 - [x] SDK threads `on_event` for live rendering; `get_cost_report` now returns real aggregated cost
-- [ ] capture screenshots for README (Phase 5)
+- [x] capture run output for README — committed verbatim **terminal output** in `docs/sample_run/` (transcript.txt/json + rerun_console.txt) in lieu of PNGs (headless terminal app); referenced from README §7. _Optional: add PNG screenshots of the interactive menu if a desktop session is available._
 
 > **Phase 4 complete.** 77 tests, 95.39% coverage, ruff clean. Cross-process
 > cost issue resolved (debater tokens travel in the IPC payload).
